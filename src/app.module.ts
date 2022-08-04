@@ -1,8 +1,12 @@
+import { join } from 'path';
+
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -18,10 +22,11 @@ import { AppService } from './app.service';
         username: config.get<string>('DB_USER'),
         password: config.get<string>('DB_USER_PASSWORD'),
         database: config.get<string>('DB_DATABASE'),
-        entities: ['../dist/src/**/*.entity.js'],
-        synchronize: true,
+        entities: [join(__dirname, '../', 'dist', 'entities/**/*.entity.js')],
+        synchronize: false,
       }),
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
