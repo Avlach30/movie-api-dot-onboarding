@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Length } from 'class-validator';
+import { IsAlpha, IsEmail, IsString, Length } from 'class-validator';
 
 export class SignupDto {
   @IsString()
@@ -8,4 +8,8 @@ export class SignupDto {
   @IsEmail()
   @Length(2, 52)
   email: string;
+
+  @IsAlpha()
+  @Length(10, 52)
+  password: string;
 }
