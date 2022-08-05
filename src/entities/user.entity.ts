@@ -13,4 +13,16 @@ export class User {
 
   @Column()
   password: string;
+
+  @Column()
+  avatar: string;
+
+  @Column()
+  is_admin: boolean;
+
+  @Column({ type: 'timestamp' })
+  created_at: string;
+
+  @Column({ type: 'timestamp' })
+  updated_at: string;
 }
