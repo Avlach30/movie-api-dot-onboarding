@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { User } from '../entities/user.entity';
+import { generateDateNow } from '../utils/date-now';
 
 @Injectable()
 export class UserService {
@@ -15,11 +16,14 @@ export class UserService {
     private configService: ConfigService,
   ) {}
 
-  async signUp(name: string, email: string, password: string) {
+  async signUp(name: string, email: string, password: string, file: any) {
     //* Validation fo required
     if (!name || !email || !password) {
       throw new BadRequestException('Please input all fields');
     }
+
+    // eslint-disable-next-line prettier/prettier
+    const avatar = `http://localhost:${this.configService.get<number>('port')}/assets${file.path.replace(/\\/g, '/').substring('public'.length)}`;
 
     //* Check if user already exist based on email
     const user = await this.userRepository.findOne({
@@ -37,13 +41,23 @@ export class UserService {
       name: name,
       email: email,
       password: hashedPw,
+      avatar: avatar,
+      is_admin: false,
+      created_at: generateDateNow(),
+      updated_at: generateDateNow(),
     });
 
     await this.userRepository.save(newUser);
 
     return {
-      message: 'Sign up successfully',
-      email: email,
+      success: true,
+      data: {
+        id: newUser.id,
+        email: newUser.email,
+        name: newUser.name,
+        avatar: newUser.avatar,
+      },
+      message: 'Sign up berhasil',
     };
   }
 
@@ -65,6 +79,7 @@ export class UserService {
     const token = this.jwtService.sign(
       {
         userId: user.id,
+        isUserAdmin: user.is_admin,
       },
       {
         expiresIn: '4h',
@@ -73,9 +88,14 @@ export class UserService {
     );
 
     return {
-      message: 'Login successfully',
-      userId: user.id,
-      token: token,
+      success: true,
+      data: {
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+        _token: token,
+      },
+      message: 'Login berhasil',
     };
   }
 }
