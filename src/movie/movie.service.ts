@@ -62,4 +62,96 @@ export class MovieService {
       message: 'Penambahan film baru berhasil',
     };
   }
+
+  async getAllmovies() {
+    const movies = await this.movieRepository.find();
+    const tags = await this.tagRepository.find();
+    const movieTags = await this.movieTagRepository.query(
+      'SELECT id as movieTagId, movie_id, tag_id FROM movie_tags',
+    );
+
+    const mappingMovieTags = movieTags.map((movieTag) => ({
+      ...movieTag,
+      ...tags.find((tag) => movieTag.tag_id == tag.id),
+    }));
+
+    mappingMovieTags.forEach((movieTag) => {
+      delete movieTag.movieTagId;
+      delete movieTag.id;
+      delete movieTag.created_at;
+      delete movieTag.updated_at;
+    });
+
+    console.log(mappingMovieTags);
+
+    console.log(movies);
+
+    const mergedMovieTags: Array<any> = [];
+
+    mappingMovieTags.forEach((movieTag) => {
+      const exist = mergedMovieTags.filter((value) => {
+        return value.movie_id == movieTag.movie_id;
+      });
+
+      if (exist.length) {
+        const existingIndex = mergedMovieTags.indexOf(exist[0]);
+        mergedMovieTags[existingIndex].tag_id = mergedMovieTags[
+          existingIndex
+        ].tag_id.concat(movieTag.tag_id);
+        mergedMovieTags[existingIndex].name = mergedMovieTags[
+          existingIndex
+        ].name.concat(movieTag.name);
+      } else {
+        if (
+          typeof movieTag.tag_id == 'string' &&
+          typeof movieTag.name == 'string'
+        )
+          movieTag.tag_id = [movieTag.tag_id];
+        movieTag.name = [movieTag.name];
+        mergedMovieTags.push(movieTag);
+      }
+    });
+
+    const mappingMovies = movies.map((movie) => ({
+      ...movie,
+      ...mergedMovieTags.find(
+        (mergedMovieTag) => mergedMovieTag.movie_id == movie.id,
+      ),
+    }));
+
+    // console.log(mappingMovies);
+
+    const mappingAllMovies = mappingMovies.map((mappingMovie) => {
+      const combined = mappingMovie.tag_id.map((tag, idx) => {
+        return {
+          id: tag,
+          name: mappingMovie.name[idx],
+        };
+      });
+
+      // console.log(combined);
+
+      const obj = {
+        id: mappingMovie.id,
+        title: mappingMovie.title,
+        overview: mappingMovie.overview,
+        poster: mappingMovie.poster,
+      };
+
+      for (let index = 0; index < combined.length; index++) {
+        const tags = `tags${index}`;
+        obj[tags] = combined[index];
+      }
+
+      return obj;
+    });
+
+    // console.log(mappingAllMovies);
+
+    return {
+      success: true,
+      data: mappingAllMovies,
+      message: 'Get all movie successfully',
+    };
+  }
 }

@@ -4,6 +4,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   UploadedFile,
@@ -49,5 +50,11 @@ export class MovieController {
   @HttpCode(201)
   async createMovie(@Body() dto: CreateMovieDto, @UploadedFile() file) {
     return await this.movieService.createMovie(dto, file);
+  }
+
+  @Get('backoffice/movies')
+  @HttpCode(200)
+  async getAllMovies() {
+    return await this.movieService.getAllmovies();
   }
 }
