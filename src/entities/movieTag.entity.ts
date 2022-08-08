@@ -13,12 +13,12 @@ export class MovieTag {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Movie, (movie) => movie.id) //Reference to Movie entity
-  @JoinColumn()
+  @ManyToOne(() => Movie, (movie) => movie.id, { eager: true }) //Reference to Movie entity
+  @JoinColumn({ name: 'movie_id' })
   movie_id: Movie;
 
-  @ManyToOne((type) => Tag, (tag) => tag.id) //Reference to Tags entity
-  @JoinColumn()
+  @ManyToOne(() => Tag, (tag) => tag.id, { eager: true }) //Reference to Tags entity
+  @JoinColumn({ name: 'tag_id' })
   tag_id: Tag;
 
   @Column({ type: 'timestamp' })
