@@ -25,6 +25,12 @@ import { AddMovieScheduleDto } from 'src/dto/addNewSchedule.dto';
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
+  @Get('movies')
+  @HttpCode(200)
+  async fetchAllMovies() {
+    return await this.movieService.getAllmovies();
+  }
+
   @Post('backoffice/movies')
   @UseInterceptors(
     FileInterceptor('poster', {
