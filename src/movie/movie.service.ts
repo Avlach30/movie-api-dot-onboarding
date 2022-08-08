@@ -134,4 +134,14 @@ export class MovieService {
       message: 'Penambahan jadwal baru berhasil',
     };
   }
+
+  async getAllTags() {
+    const tags = await this.tagRepository.find();
+
+    return {
+      success: true,
+      data: tags,
+      message: 'Get all movie tags successfully',
+    };
+  }
 }

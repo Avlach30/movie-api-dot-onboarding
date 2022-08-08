@@ -77,4 +77,10 @@ export class MovieController {
   async addNewSchedule(@Body() dto: AddMovieScheduleDto) {
     return await this.movieService.addNewSchedule(dto);
   }
+
+  @Get('backoffice/tags')
+  @HttpCode(200)
+  async getAllTags() {
+    return await this.movieService.getAllTags();
+  }
 }
