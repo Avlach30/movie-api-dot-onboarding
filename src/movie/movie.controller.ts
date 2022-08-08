@@ -17,6 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from 'src/dto/createMovie.dto';
+import { AddMovieStudioDto } from 'src/dto/addNewStudio.dto';
 
 @Controller('api/v1')
 @UseGuards(AuthGuard('jwt'))
@@ -56,5 +57,11 @@ export class MovieController {
   @HttpCode(200)
   async getAllMovies() {
     return await this.movieService.getAllmovies();
+  }
+
+  @Post('backoffice/movies/studios')
+  @HttpCode(201)
+  async addStudio(@Body() dto: AddMovieStudioDto) {
+    return await this.movieService.addStudio(dto);
   }
 }

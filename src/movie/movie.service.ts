@@ -8,6 +8,8 @@ import { Tag } from '../entities/tag.entity';
 import { MovieTag } from '../entities/movieTag.entity';
 import { CreateMovieDto } from '../dto/createMovie.dto';
 import { generateDateNow } from 'src/utils/date-now';
+import { AddMovieStudioDto } from 'src/dto/addNewStudio.dto';
+import { Studio } from 'src/entities/movieStudio.entity';
 
 @Injectable()
 export class MovieService {
@@ -16,6 +18,8 @@ export class MovieService {
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
     @InjectRepository(MovieTag)
     private movieTagRepository: Repository<MovieTag>,
+    @InjectRepository(Studio)
+    private movieStudioRepository: Repository<Studio>,
     private configService: ConfigService,
   ) {}
 
@@ -152,6 +156,23 @@ export class MovieService {
       success: true,
       data: mappingAllMovies,
       message: 'Get all movie successfully',
+    };
+  }
+
+  async addStudio(addNewStudioDto: AddMovieStudioDto) {
+    const newStudio = await this.movieStudioRepository.create({
+      studio_number: addNewStudioDto.studio_number,
+      seat_capacity: addNewStudioDto.seat_capacity,
+      created_at: generateDateNow(),
+      updated_at: generateDateNow(),
+    });
+
+    await this.movieStudioRepository.save(newStudio);
+
+    return {
+      success: true,
+      data: newStudio,
+      message: 'Penambahan studio baru berhasil',
     };
   }
 }
