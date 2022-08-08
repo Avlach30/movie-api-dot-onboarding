@@ -51,12 +51,15 @@ export class MovieService {
         updated_at: generateDateNow(),
       });
 
-      const saveTag = await this.tagRepository.save(newTag);
+      await this.tagRepository.save(newTag);
 
-      await this.movieTagRepository.query(
-        'INSERT INTO movie_tags (movie_id, tag_id, created_at, updated_at) VALUES(?, ?, ?, ?)',
-        [movie.id, saveTag.id, generateDateNow(), generateDateNow()],
-      );
+      const newMovieTag = new MovieTag();
+      newMovieTag.movie_id = movie;
+      newMovieTag.tag_id = newTag;
+      newMovieTag.created_at = generateDateNow();
+      newMovieTag.updated_at = generateDateNow();
+
+      await this.movieTagRepository.save(newMovieTag);
     });
 
     return {
