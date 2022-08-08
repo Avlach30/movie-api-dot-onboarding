@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { MovieSchedule } from 'src/entities/movieSchedule.entity';
 import { Studio } from 'src/entities/movieStudio.entity';
 
 import { Movie } from '../entities/movie.entity';
@@ -12,7 +13,7 @@ import { MovieService } from './movie.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Movie, Tag, MovieTag, Studio]),
+    TypeOrmModule.forFeature([Movie, Tag, MovieTag, Studio, MovieSchedule]),
     MulterModule.register({
       dest: './assets/movie-poster',
     }),
