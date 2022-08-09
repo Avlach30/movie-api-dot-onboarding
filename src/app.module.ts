@@ -23,8 +23,11 @@ import { MovieModule } from './movie/movie.module';
         username: config.get<string>('DB_USER'),
         password: config.get<string>('DB_USER_PASSWORD'),
         database: config.get<string>('DB_DATABASE'),
-        entities: [join(__dirname, '../', 'dist', 'entities/**/*.entity.js')],
+        entities: [
+          join(__dirname, '../', 'dist', 'entities/**/*.entity{ .ts,.js}'),
+        ],
         synchronize: false,
+        migrations: [join(__dirname, '../', 'dist', 'migrations/*{.ts,.js}')],
       }),
     }),
     UserModule,
