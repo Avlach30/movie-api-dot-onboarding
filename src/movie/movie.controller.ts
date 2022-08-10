@@ -31,6 +31,12 @@ export class MovieController {
     return await this.movieService.getAllmovies();
   }
 
+  @Get('movies/now_playing')
+  @HttpCode(200)
+  async getSchedule() {
+    return await this.movieService.getSchedule();
+  }
+
   @Post('backoffice/movies')
   @UseInterceptors(
     FileInterceptor('poster', {

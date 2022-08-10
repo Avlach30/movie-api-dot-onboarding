@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { Movie } from '../entities/movie.entity';
 import { Tag } from '../entities/tag.entity';
@@ -132,6 +133,26 @@ export class MovieService {
       success: true,
       data: newSchedule,
       message: 'Penambahan jadwal baru berhasil',
+    };
+  }
+
+  //* Bingung mengonfigurasikan task schedule khusus movie yg sedang tayang
+  @Cron(CronExpression.EVERY_10_SECONDS)
+  async getSchedule() {
+    const dateNow = new Date().toISOString().split('T')[0];
+
+    //* Inner join 3 table with like criteria
+    const schedule = await this.movieScheduleRepository
+      .createQueryBuilder('movie_schedules')
+      .where('movie_schedules.date like :date', { date: `${dateNow}%` })
+      .innerJoinAndSelect('movie_schedules.movie_id', 'movies')
+      .innerJoinAndSelect('movie_schedules.studio_id', 'studios')
+      .getMany();
+
+    return {
+      success: true,
+      data: schedule,
+      message: 'Get now movie schedule successfully',
     };
   }
 
