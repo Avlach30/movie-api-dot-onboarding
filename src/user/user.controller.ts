@@ -6,6 +6,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { diskStorage } from 'multer';
 
 import { UserService } from './user.service';
 import { SignupDto } from '../dto/signUp.dto';
+import { IpLogger } from '../utils/ip-logger';
 
 @Controller('api/v1/auth')
 export class UserController {
@@ -44,7 +46,8 @@ export class UserController {
     }),
   )
   @HttpCode(201)
-  async signUp(@Body() dto: SignupDto, @UploadedFile() file) {
+  async signUp(@Body() dto: SignupDto, @UploadedFile() file, @Req() req: any) {
+    IpLogger(req);
     return await this.userService.signUp(
       dto.name,
       dto.email,
@@ -58,7 +61,9 @@ export class UserController {
   async logIn(
     @Body('email') email: string,
     @Body('password') password: string,
+    @Req() req: any,
   ) {
+    IpLogger(req);
     return await this.userService.login(email, password);
   }
 }

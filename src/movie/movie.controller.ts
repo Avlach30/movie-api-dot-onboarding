@@ -7,6 +7,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -19,6 +20,7 @@ import { MovieService } from './movie.service';
 import { CreateMovieDto } from 'src/dto/createMovie.dto';
 import { AddMovieStudioDto } from 'src/dto/addNewStudio.dto';
 import { AddMovieScheduleDto } from 'src/dto/addNewSchedule.dto';
+import { IpLogger } from 'src/utils/ip-logger';
 
 @Controller('api/v1')
 @UseGuards(AuthGuard('jwt'))
@@ -27,13 +29,15 @@ export class MovieController {
 
   @Get('movies')
   @HttpCode(200)
-  async fetchAllMovies() {
+  async fetchAllMovies(@Req() req: any) {
+    IpLogger(req);
     return await this.movieService.getAllmovies();
   }
 
   @Get('movies/now_playing')
   @HttpCode(200)
-  async getSchedule() {
+  async getSchedule(@Req() req: any) {
+    IpLogger(req);
     return await this.movieService.getSchedule();
   }
 
@@ -62,31 +66,40 @@ export class MovieController {
     }),
   )
   @HttpCode(201)
-  async createMovie(@Body() dto: CreateMovieDto, @UploadedFile() file) {
+  async createMovie(
+    @Body() dto: CreateMovieDto,
+    @UploadedFile() file,
+    @Req() req: any,
+  ) {
+    IpLogger(req);
     return await this.movieService.createMovie(dto, file);
   }
 
   @Get('backoffice/movies')
   @HttpCode(200)
-  async getAllMovies() {
+  async getAllMovies(@Req() req: any) {
+    IpLogger(req);
     return await this.movieService.getAllmovies();
   }
 
   @Post('backoffice/movies/studios')
   @HttpCode(201)
-  async addStudio(@Body() dto: AddMovieStudioDto) {
+  async addStudio(@Body() dto: AddMovieStudioDto, @Req() req: any) {
+    IpLogger(req);
     return await this.movieService.addStudio(dto);
   }
 
   @Post('backoffice/movies/schedule')
   @HttpCode(201)
-  async addNewSchedule(@Body() dto: AddMovieScheduleDto) {
+  async addNewSchedule(@Body() dto: AddMovieScheduleDto, @Req() req: any) {
+    IpLogger(req);
     return await this.movieService.addNewSchedule(dto);
   }
 
   @Get('backoffice/tags')
   @HttpCode(200)
-  async getAllTags() {
+  async getAllTags(@Req() req: any) {
+    IpLogger(req);
     return await this.movieService.getAllTags();
   }
 }
