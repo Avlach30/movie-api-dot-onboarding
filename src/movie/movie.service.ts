@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -136,9 +136,7 @@ export class MovieService {
     };
   }
 
-  //* Bingung mengonfigurasikan task schedule khusus movie yg sedang tayang
-  @Cron(CronExpression.EVERY_10_SECONDS)
-  async getSchedule() {
+  async getNowSchedule() {
     const dateNow = new Date().toISOString().split('T')[0];
 
     //* Inner join 3 table with like criteria
@@ -154,6 +152,14 @@ export class MovieService {
       data: schedule,
       message: 'Get now movie schedule successfully',
     };
+  }
+
+  //* Run this function every 2 hours
+  @Cron(CronExpression.EVERY_2_HOURS, { name: 'Get all movie schedules' })
+  async getAllSchedule() {
+    const allSchedules = await this.movieScheduleRepository.find();
+    Logger.log('Get all movie schedule . . .');
+    console.log(allSchedules);
   }
 
   async getAllTags() {
