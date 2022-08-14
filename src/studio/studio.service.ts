@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { Studio } from 'src/entities/movie-studio.entity';
 import { generateDateNow } from 'src/utils/date-now';
-import { AddMovieStudioDto } from 'src/dto/addNewStudio.dto';
+import { AddMovieStudioDto } from 'src/dto/add-new-studio.dto';
 
 @Injectable()
 export class StudioService {

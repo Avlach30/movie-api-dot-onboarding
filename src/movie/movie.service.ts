@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { Movie } from '../entities/movie.entity';
 import { Tag } from '../entities/tag.entity';
 import { MovieTag } from '../entities/movie-tag.entity';
-import { CreateMovieDto } from '../dto/createMovie.dto';
+import { CreateMovieDto } from '../dto/create-movie.dto';
 import { generateDateNow } from 'src/utils/date-now';
 
 @Injectable()

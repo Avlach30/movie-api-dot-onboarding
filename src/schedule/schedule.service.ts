@@ -2,7 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { AddMovieScheduleDto } from 'src/dto/addNewSchedule.dto';
+import { AddMovieScheduleDto } from 'src/dto/add-new-schedule.dto';
 import { MovieSchedule } from 'src/entities/movie-schedule.entity';
 import { Studio } from 'src/entities/movie-studio.entity';
 import { Movie } from 'src/entities/movie.entity';

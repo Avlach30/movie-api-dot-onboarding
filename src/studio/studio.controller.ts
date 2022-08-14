@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { AddMovieStudioDto } from 'src/dto/addNewStudio.dto';
+import { AddMovieStudioDto } from 'src/dto/add-new-studio.dto';
 import { IpLogger } from 'src/utils/ip-logger';
 import { StudioService } from './studio.service';
 

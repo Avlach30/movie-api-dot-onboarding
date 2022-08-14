@@ -14,7 +14,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
 import { UserService } from './user.service';
-import { SignupDto } from '../dto/signUp.dto';
+import { SignupDto } from '../dto/sign-up.dto';
 import { IpLogger } from '../utils/ip-logger';
 
 @Controller('api/v1/auth')

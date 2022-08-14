@@ -17,7 +17,7 @@ import { diskStorage } from 'multer';
 import { AuthGuard } from '@nestjs/passport';
 
 import { MovieService } from './movie.service';
-import { CreateMovieDto } from 'src/dto/createMovie.dto';
+import { CreateMovieDto } from 'src/dto/create-movie.dto';
 import { IpLogger } from 'src/utils/ip-logger';
 
 @Controller('api')

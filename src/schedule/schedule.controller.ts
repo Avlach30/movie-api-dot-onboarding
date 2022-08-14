@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
-import { AddMovieScheduleDto } from 'src/dto/addNewSchedule.dto';
+import { AddMovieScheduleDto } from 'src/dto/add-new-schedule.dto';
 import { IpLogger } from 'src/utils/ip-logger';
 import { ScheduleService } from './schedule.service';
 
