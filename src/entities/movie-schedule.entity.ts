@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Movie } from './movie.entity';
-import { Studio } from './movieStudio.entity';
+import { Studio } from './movie-studio.entity';
 
 @Entity({ name: 'movie_schedules' })
 export class MovieSchedule {
