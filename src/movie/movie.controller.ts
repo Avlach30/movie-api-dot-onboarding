@@ -36,9 +36,9 @@ export class MovieController {
 
   @Get('movies/now_playing')
   @HttpCode(200)
-  async getSchedule(@Req() req: any) {
+  async getNowSchedule(@Req() req: any) {
     IpLogger(req);
-    return await this.movieService.getSchedule();
+    return await this.movieService.getNowSchedule();
   }
 
   @Post('backoffice/movies')
