@@ -8,6 +8,8 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { MovieModule } from './movie/movie.module';
 import { AppConfig } from './config/app.config';
+import { StudioModule } from './studio/studio.module';
+import { MovieScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { AppConfig } from './config/app.config';
     ScheduleModule.forRoot(),
     UserModule,
     MovieModule,
+    StudioModule,
+    MovieScheduleModule,
   ],
   controllers: [AppController],
   providers: [AppService],
