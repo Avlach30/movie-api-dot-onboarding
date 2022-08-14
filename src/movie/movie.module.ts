@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MovieSchedule } from 'src/entities/movieSchedule.entity';
-import { Studio } from 'src/entities/movieStudio.entity';
 
+import { MovieSchedule } from 'src/entities/movie-schedule.entity';
+import { Studio } from 'src/entities/movie-studio.entity';
 import { Movie } from '../entities/movie.entity';
 import { MovieTag } from '../entities/movieTag.entity';
 import { Tag } from '../entities/tag.entity';

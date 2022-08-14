@@ -18,11 +18,9 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from 'src/dto/createMovie.dto';
-import { AddMovieStudioDto } from 'src/dto/addNewStudio.dto';
-import { AddMovieScheduleDto } from 'src/dto/addNewSchedule.dto';
 import { IpLogger } from 'src/utils/ip-logger';
 
-@Controller('api/v1')
+@Controller('api')
 @UseGuards(AuthGuard('jwt'))
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
@@ -32,13 +30,6 @@ export class MovieController {
   async fetchAllMovies(@Req() req: any) {
     IpLogger(req);
     return await this.movieService.getAllmovies();
-  }
-
-  @Get('movies/now_playing')
-  @HttpCode(200)
-  async getNowSchedule(@Req() req: any) {
-    IpLogger(req);
-    return await this.movieService.getNowSchedule();
   }
 
   @Post('backoffice/movies')
@@ -82,21 +73,7 @@ export class MovieController {
     return await this.movieService.getAllmovies();
   }
 
-  @Post('backoffice/movies/studios')
-  @HttpCode(201)
-  async addStudio(@Body() dto: AddMovieStudioDto, @Req() req: any) {
-    IpLogger(req);
-    return await this.movieService.addStudio(dto);
-  }
-
-  @Post('backoffice/movies/schedule')
-  @HttpCode(201)
-  async addNewSchedule(@Body() dto: AddMovieScheduleDto, @Req() req: any) {
-    IpLogger(req);
-    return await this.movieService.addNewSchedule(dto);
-  }
-
-  @Get('backoffice/tags')
+  @Get('backoffice/movies/tags')
   @HttpCode(200)
   async getAllTags(@Req() req: any) {
     IpLogger(req);
