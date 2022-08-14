@@ -3,7 +3,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Movie } from './movie.entity';
@@ -18,7 +17,7 @@ export class MovieSchedule {
   @JoinColumn({ name: 'movie_id' })
   movie_id: Movie;
 
-  @ManyToOne(() => Studio, (studio) => studio.id) //Reference to Studio entity
+  @ManyToOne(() => Studio, (studio) => studio.id, { eager: true }) //Reference to Studio entity
   @JoinColumn({ name: 'studio_id' })
   studio_id: Studio;
 
