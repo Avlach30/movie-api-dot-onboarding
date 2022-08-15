@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -10,6 +10,7 @@ import { MovieModule } from './movie/movie.module';
 import { AppConfig } from './config/app.config';
 import { StudioModule } from './studio/studio.module';
 import { MovieScheduleModule } from './schedule/schedule.module';
+import { IpLoggerMidlleware } from './middleware/ip-logger';
 
 @Module({
   imports: [
@@ -26,4 +27,8 @@ import { MovieScheduleModule } from './schedule/schedule.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(IpLoggerMidlleware).forRoutes('*');
+  }
+}
