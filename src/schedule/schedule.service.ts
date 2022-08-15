@@ -49,9 +49,8 @@ export class ScheduleService {
     await this.scheduleRepository.save(newSchedule);
 
     return {
-      success: true,
       data: newSchedule,
-      message: 'Penambahan jadwal baru berhasil',
+      message: 'Add new schedule successfully',
     };
   }
 
@@ -67,7 +66,6 @@ export class ScheduleService {
       .getMany();
 
     return {
-      success: true,
       data: schedule,
       message: 'Get now movie schedule successfully',
     };

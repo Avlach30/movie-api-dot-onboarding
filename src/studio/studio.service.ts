@@ -23,9 +23,8 @@ export class StudioService {
     await this.movieStudioRepository.save(newStudio);
 
     return {
-      success: true,
       data: newStudio,
-      message: 'Penambahan studio baru berhasil',
+      message: 'Add new movie studio successfully',
     };
   }
 }

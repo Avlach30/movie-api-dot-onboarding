@@ -55,14 +55,8 @@ export class MovieService {
     });
 
     return {
-      success: true,
-      data: {
-        title: movie.title,
-        overview: movie.overview,
-        poster: movie.poster,
-        play_until: movie.play_until,
-      },
-      message: 'Penambahan film baru berhasil',
+      data: movie,
+      message: 'Add new movie successfully',
     };
   }
 
@@ -70,7 +64,6 @@ export class MovieService {
     const movies = await this.movieRepository.find();
 
     return {
-      success: true,
       data: movies,
       message: 'Get all movie successfully',
     };
@@ -80,7 +73,6 @@ export class MovieService {
     const tags = await this.tagRepository.find();
 
     return {
-      success: true,
       data: tags,
       message: 'Get all movie tags successfully',
     };

@@ -9,6 +9,7 @@ import {
   Post,
   Req,
   UploadedFile,
+  UseFilters,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -18,9 +19,13 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from 'src/dto/create-movie.dto';
-import { IpLogger } from 'src/utils/ip-logger';
+import { IpLogger } from 'src/middleware/ip-logger';
+import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
+import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 
 @Controller('api')
+@UseInterceptors(ResponseInterceptor)
+@UseFilters(HttpExceptionFilter)
 @UseGuards(AuthGuard('jwt'))
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}

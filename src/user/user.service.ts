@@ -17,11 +17,6 @@ export class UserService {
   ) {}
 
   async signUp(name: string, email: string, password: string, file: any) {
-    //* Validation fo required
-    if (!name || !email || !password) {
-      throw new BadRequestException('Please input all fields');
-    }
-
     // eslint-disable-next-line prettier/prettier
     const avatar = `http://localhost:${this.configService.get<number>('port')}/assets${file.path.replace(/\\/g, '/').substring('public'.length)}`;
 
@@ -50,14 +45,8 @@ export class UserService {
     await this.userRepository.save(newUser);
 
     return {
-      success: true,
-      data: {
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name,
-        avatar: newUser.avatar,
-      },
-      message: 'Sign up berhasil',
+      data: newUser,
+      message: 'Sign up successfully',
     };
   }
 
@@ -88,14 +77,11 @@ export class UserService {
     );
 
     return {
-      success: true,
       data: {
-        email: user.email,
-        name: user.name,
-        avatar: user.avatar,
         _token: token,
+        userId: user.id,
       },
-      message: 'Login berhasil',
+      message: 'Successfully log in',
     };
   }
 }

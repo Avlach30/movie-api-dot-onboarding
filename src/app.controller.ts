@@ -1,7 +1,7 @@
 import { Controller, Get, Req } from '@nestjs/common';
 
 import { AppService } from './app.service';
-import { IpLogger } from './utils/ip-logger';
+import { IpLogger } from './middleware/ip-logger';
 
 @Controller()
 export class AppController {

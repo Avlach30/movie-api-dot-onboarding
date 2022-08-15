@@ -8,6 +8,7 @@ import {
   Post,
   Req,
   UploadedFile,
+  UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -15,9 +16,13 @@ import { diskStorage } from 'multer';
 
 import { UserService } from './user.service';
 import { SignupDto } from '../dto/sign-up.dto';
-import { IpLogger } from '../utils/ip-logger';
+import { IpLogger } from '../middleware/ip-logger';
+import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
+import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 
 @Controller('api/v1/auth')
+@UseInterceptors(ResponseInterceptor)
+@UseFilters(new HttpExceptionFilter())
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
