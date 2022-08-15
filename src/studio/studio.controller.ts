@@ -3,7 +3,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  Req,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -11,7 +10,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { AddMovieStudioDto } from 'src/dto/add-new-studio.dto';
-import { IpLogger } from 'src/middleware/ip-logger';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { StudioService } from './studio.service';
@@ -25,8 +23,7 @@ export class StudioController {
 
   @Post('studios')
   @HttpCode(201)
-  async addStudio(@Body() dto: AddMovieStudioDto, @Req() req: any) {
-    IpLogger(req);
+  async addStudio(@Body() dto: AddMovieStudioDto) {
     return await this.studioService.addStudio(dto);
   }
 }

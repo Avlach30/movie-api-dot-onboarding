@@ -7,7 +7,6 @@ import {
   Get,
   HttpCode,
   Post,
-  Req,
   UploadedFile,
   UseFilters,
   UseGuards,
@@ -19,7 +18,6 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from 'src/dto/create-movie.dto';
-import { IpLogger } from 'src/middleware/ip-logger';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 
@@ -32,8 +30,7 @@ export class MovieController {
 
   @Get('movies')
   @HttpCode(200)
-  async fetchAllMovies(@Req() req: any) {
-    IpLogger(req);
+  async fetchAllMovies() {
     return await this.movieService.getAllmovies();
   }
 
@@ -62,26 +59,19 @@ export class MovieController {
     }),
   )
   @HttpCode(201)
-  async createMovie(
-    @Body() dto: CreateMovieDto,
-    @UploadedFile() file,
-    @Req() req: any,
-  ) {
-    IpLogger(req);
+  async createMovie(@Body() dto: CreateMovieDto, @UploadedFile() file) {
     return await this.movieService.createMovie(dto, file);
   }
 
   @Get('backoffice/movies')
   @HttpCode(200)
-  async getAllMovies(@Req() req: any) {
-    IpLogger(req);
+  async getAllMovies() {
     return await this.movieService.getAllmovies();
   }
 
   @Get('backoffice/movies/tags')
   @HttpCode(200)
-  async getAllTags(@Req() req: any) {
-    IpLogger(req);
+  async getAllTags() {
     return await this.movieService.getAllTags();
   }
 }

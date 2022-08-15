@@ -4,7 +4,6 @@ import {
   Get,
   HttpCode,
   Post,
-  Req,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -12,7 +11,6 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 import { AddMovieScheduleDto } from 'src/dto/add-new-schedule.dto';
-import { IpLogger } from 'src/middleware/ip-logger';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { ScheduleService } from './schedule.service';
@@ -26,15 +24,13 @@ export class ScheduleController {
 
   @Get('now-playing')
   @HttpCode(200)
-  async getNowSchedule(@Req() req: any) {
-    IpLogger(req);
+  async getNowSchedule() {
     return await this.scheduleService.getNowSchedule();
   }
 
   @Post('schedules')
   @HttpCode(201)
-  async addNewSchedule(@Body() dto: AddMovieScheduleDto, @Req() req: any) {
-    IpLogger(req);
+  async addNewSchedule(@Body() dto: AddMovieScheduleDto) {
     return await this.scheduleService.addNewSchedule(dto);
   }
 }

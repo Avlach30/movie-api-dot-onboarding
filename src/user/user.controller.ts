@@ -6,7 +6,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  Req,
   UploadedFile,
   UseFilters,
   UseInterceptors,
@@ -16,7 +15,6 @@ import { diskStorage } from 'multer';
 
 import { UserService } from './user.service';
 import { SignupDto } from '../dto/sign-up.dto';
-import { IpLogger } from '../middleware/ip-logger';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 
@@ -51,8 +49,7 @@ export class UserController {
     }),
   )
   @HttpCode(201)
-  async signUp(@Body() dto: SignupDto, @UploadedFile() file, @Req() req: any) {
-    IpLogger(req);
+  async signUp(@Body() dto: SignupDto, @UploadedFile() file) {
     return await this.userService.signUp(
       dto.name,
       dto.email,
@@ -66,9 +63,7 @@ export class UserController {
   async logIn(
     @Body('email') email: string,
     @Body('password') password: string,
-    @Req() req: any,
   ) {
-    IpLogger(req);
     return await this.userService.login(email, password);
   }
 }
