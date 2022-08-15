@@ -1,6 +1,13 @@
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import * as requestIp from 'request-ip';
 
-export const IpLogger = (req: any) => {
-  return Logger.log(`Hello!, your ip address is ${requestIp.getClientIp(req)}`);
-};
+@Injectable()
+//* Create custom middleware
+export class IpLoggerMidlleware implements NestMiddleware {
+  use(req: any, res: any, next: (error?: any) => void) {
+    return Logger.log(
+      `Hello!, your ip address is ${requestIp.getClientIp(req)}`,
+    );
+    next();
+  }
+}
