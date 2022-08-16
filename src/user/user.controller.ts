@@ -1,7 +1,4 @@
-import { extname } from 'path';
-
 import {
-  BadRequestException,
   Body,
   Controller,
   HttpCode,
@@ -10,13 +7,12 @@ import {
   UseFilters,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 
 import { UserService } from './user.service';
 import { SignupDto } from '../dto/sign-up.dto';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
+import { UploadHandler } from 'src/utils/image-upload';
 
 @Controller('api/v1/auth')
 @UseInterceptors(ResponseInterceptor)
@@ -25,41 +21,35 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('signup')
-  @UseInterceptors(
-    FileInterceptor('avatar', {
-      storage: diskStorage({
-        destination: './assets/avatar',
-        filename(req, file, callback) {
-          const fileExtName = extname(file.originalname);
-          const newName = Date.now();
-          callback(null, `image-${newName}${fileExtName}`);
-        },
-      }),
-      fileFilter(req, file, callback) {
-        if (!file.originalname.match(/\.(jpg|jpeg)$/)) {
-          return callback(
-            new BadRequestException(
-              'Sorry, only image files (jpg/jpeg) are allowed!',
-            ),
-            false,
-          );
-        }
-        callback(null, true);
-      },
-    }),
-  )
+  @UseInterceptors(UploadHandler('avatar', 'avatar'))
   @HttpCode(201)
-  async signUp(@Body() dto: SignupDto, @UploadedFile() file) {
+  async signUpCustomer(@Body() dto: SignupDto, @UploadedFile() file) {
     return await this.userService.signUp(
       dto.name,
       dto.email,
       dto.password,
       file,
+      false,
+      'Sign up for customer successfully',
+    );
+  }
+
+  @Post('/admin/signup')
+  @UseInterceptors(UploadHandler('avatar', 'avatar-admin'))
+  @HttpCode(201)
+  async signUpAdmin(@Body() dto: SignupDto, @UploadedFile() file) {
+    return await this.userService.signUp(
+      dto.name,
+      dto.email,
+      dto.password,
+      file,
+      true,
+      'Sign up for admin successfully',
     );
   }
 
   @Post('login')
-  @HttpCode(201)
+  @HttpCode(200)
   async logIn(
     @Body('email') email: string,
     @Body('password') password: string,

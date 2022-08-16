@@ -16,7 +16,14 @@ export class UserService {
     private configService: ConfigService,
   ) {}
 
-  async signUp(name: string, email: string, password: string, file: any) {
+  async signUp(
+    name: string,
+    email: string,
+    password: string,
+    file: any,
+    isAdmin: boolean,
+    message: string,
+  ) {
     // eslint-disable-next-line prettier/prettier
     const avatar = `http://localhost:${this.configService.get<number>('port')}/assets${file.path.replace(/\\/g, '/').substring('public'.length)}`;
 
@@ -37,7 +44,7 @@ export class UserService {
       email: email,
       password: hashedPw,
       avatar: avatar,
-      is_admin: false,
+      is_admin: isAdmin,
       created_at: generateDateNow(),
       updated_at: generateDateNow(),
     });
@@ -46,7 +53,7 @@ export class UserService {
 
     return {
       data: newUser,
-      message: 'Sign up successfully',
+      message: message,
     };
   }
 
