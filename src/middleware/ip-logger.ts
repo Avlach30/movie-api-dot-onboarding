@@ -5,9 +5,7 @@ import * as requestIp from 'request-ip';
 //* Create custom middleware
 export class IpLoggerMidlleware implements NestMiddleware {
   use(req: any, res: any, next: (error?: any) => void) {
-    return Logger.log(
-      `Hello!, your ip address is ${requestIp.getClientIp(req)}`,
-    );
+    Logger.log(`Hello!, your ip address is ${requestIp.getClientIp(req)}`);
     next();
   }
 }
