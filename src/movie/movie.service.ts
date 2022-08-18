@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 import { Movie } from '../entities/movie.entity';
@@ -14,8 +14,6 @@ export class MovieService {
   constructor(
     @InjectRepository(Movie) private movieRepository: Repository<Movie>,
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
-    @InjectRepository(MovieTag)
-    private movieTagRepository: Repository<MovieTag>,
     private configService: ConfigService,
   ) {}
 
@@ -25,39 +23,57 @@ export class MovieService {
     // eslint-disable-next-line prettier/prettier
     const poster = `http://localhost:${this.configService.get<number>('port')}/assets${file.path.replace(/\\/g, '/').substring('public'.length)}`;
 
-    const newMovie = await this.movieRepository.create({
-      title: createMovieDto.title,
-      overview: createMovieDto.overview,
-      poster: poster,
-      play_until: createMovieDto.play_until,
-      created_at: generateDateNow(),
-      updated_at: generateDateNow(),
-    });
+    const connection = getConnection();
+    const queryRunner = connection.createQueryRunner();
 
-    const movie = await this.movieRepository.save(newMovie);
+    await queryRunner.connect();
 
-    tags.forEach(async (tag) => {
-      const newTag = await this.tagRepository.create({
-        name: tag,
+    await queryRunner.startTransaction();
+
+    let movie;
+    try {
+      const newMovie = await queryRunner.manager.create(Movie, {
+        title: createMovieDto.title,
+        overview: createMovieDto.overview,
+        poster: poster,
+        play_until: createMovieDto.play_until,
         created_at: generateDateNow(),
         updated_at: generateDateNow(),
       });
 
-      await this.tagRepository.save(newTag);
+      await queryRunner.manager.save(newMovie);
 
-      const newMovieTag = new MovieTag();
-      newMovieTag.movie_id = movie;
-      newMovieTag.tag_id = newTag;
-      newMovieTag.created_at = generateDateNow();
-      newMovieTag.updated_at = generateDateNow();
+      tags.forEach(async (tag) => {
+        const newTag = await queryRunner.manager.create(Tag, {
+          name: tag,
+          created_at: generateDateNow(),
+          updated_at: generateDateNow(),
+        });
 
-      await this.movieTagRepository.save(newMovieTag);
-    });
+        await queryRunner.manager.save(newTag);
 
-    return {
-      data: movie,
-      message: 'Add new movie successfully',
-    };
+        const newMovieTag = new MovieTag();
+        newMovieTag.movie_id = newMovie;
+        newMovieTag.tag_id = newTag;
+        newMovieTag.created_at = generateDateNow();
+        newMovieTag.updated_at = generateDateNow();
+
+        await queryRunner.manager.save(newMovieTag);
+      });
+
+      movie = newMovie;
+
+      await queryRunner.commitTransaction();
+
+      return {
+        data: movie,
+        message: 'Add new movie successfully',
+      };
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      throw new InternalServerErrorException('Create new movie failed');
+    }
   }
 
   async getAllmovies() {
