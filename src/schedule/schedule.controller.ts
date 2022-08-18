@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Req,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -30,7 +31,7 @@ export class ScheduleController {
 
   @Post('schedules')
   @HttpCode(201)
-  async addNewSchedule(@Body() dto: AddMovieScheduleDto) {
-    return await this.scheduleService.addNewSchedule(dto);
+  async addNewSchedule(@Body() dto: AddMovieScheduleDto, @Req() req: any) {
+    return await this.scheduleService.addNewSchedule(dto, req);
   }
 }

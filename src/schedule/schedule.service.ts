@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -19,7 +24,10 @@ export class ScheduleService {
     @InjectRepository(Movie) private movieRepository: Repository<Movie>,
   ) {}
 
-  async addNewSchedule(dto: AddMovieScheduleDto) {
+  async addNewSchedule(dto: AddMovieScheduleDto, req: any) {
+    const admin = req.user.isUserAdmin;
+    if (!admin) throw new ForbiddenException('Forbidden to access, only admin');
+
     const newSchedule = new MovieSchedule();
 
     const studio = await this.studioRepository.findOne({

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -12,7 +12,10 @@ export class StudioService {
     @InjectRepository(Studio) private movieStudioRepository: Repository<Studio>,
   ) {}
 
-  async addStudio(addNewStudioDto: AddMovieStudioDto) {
+  async addStudio(addNewStudioDto: AddMovieStudioDto, req: any) {
+    const admin = req.user.isUserAdmin;
+    if (!admin) throw new ForbiddenException('Forbidden to access, only admin');
+
     const newStudio = await this.movieStudioRepository.create({
       studio_number: addNewStudioDto.studio_number,
       seat_capacity: addNewStudioDto.seat_capacity,

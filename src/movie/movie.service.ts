@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { getConnection, Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
@@ -17,7 +21,10 @@ export class MovieService {
     private configService: ConfigService,
   ) {}
 
-  async createMovie(createMovieDto: CreateMovieDto, file: any) {
+  async createMovie(createMovieDto: CreateMovieDto, file: any, req: any) {
+    const admin = req.user.isUserAdmin;
+    if (!admin) throw new ForbiddenException('Forbidden to access, only admin');
+
     const tags = createMovieDto.tags;
 
     // eslint-disable-next-line prettier/prettier

@@ -3,6 +3,7 @@ import {
   Controller,
   HttpCode,
   Post,
+  Req,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -23,7 +24,7 @@ export class StudioController {
 
   @Post('studios')
   @HttpCode(201)
-  async addStudio(@Body() dto: AddMovieStudioDto) {
-    return await this.studioService.addStudio(dto);
+  async addStudio(@Body() dto: AddMovieStudioDto, @Req() req: any) {
+    return await this.studioService.addStudio(dto, req);
   }
 }

@@ -7,6 +7,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Req,
   UploadedFile,
   UseFilters,
   UseGuards,
@@ -59,8 +60,12 @@ export class MovieController {
     }),
   )
   @HttpCode(201)
-  async createMovie(@Body() dto: CreateMovieDto, @UploadedFile() file) {
-    return await this.movieService.createMovie(dto, file);
+  async createMovie(
+    @Body() dto: CreateMovieDto,
+    @UploadedFile() file,
+    @Req() req: any,
+  ) {
+    return await this.movieService.createMovie(dto, file, req);
   }
 
   @Get('backoffice/movies')
