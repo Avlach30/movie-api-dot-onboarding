@@ -13,9 +13,10 @@ import { SignupDto } from '../dto/sign-up.dto';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 import { UploadHandler } from 'src/utils/image-upload';
+import { SentryInterceptor } from 'src/utils/sentry.interceptor';
 
 @Controller('api/v1/auth')
-@UseInterceptors(ResponseInterceptor)
+@UseInterceptors(ResponseInterceptor, SentryInterceptor)
 @UseFilters(new HttpExceptionFilter())
 export class UserController {
   constructor(private readonly userService: UserService) {}

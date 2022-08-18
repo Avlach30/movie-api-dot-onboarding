@@ -21,9 +21,10 @@ import { MovieService } from './movie.service';
 import { CreateMovieDto } from 'src/dto/create-movie.dto';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
+import { SentryInterceptor } from 'src/utils/sentry.interceptor';
 
 @Controller('api')
-@UseInterceptors(ResponseInterceptor)
+@UseInterceptors(ResponseInterceptor, SentryInterceptor)
 @UseFilters(HttpExceptionFilter)
 @UseGuards(AuthGuard('jwt'))
 export class MovieController {
