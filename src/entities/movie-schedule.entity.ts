@@ -21,10 +21,10 @@ export class MovieSchedule {
   @JoinColumn({ name: 'studio_id' })
   studioId: Studio;
 
-  @Column({ name: 'start-time' })
+  @Column({ name: 'start_time' })
   startTime: string;
 
-  @Column({ name: 'end-time' })
+  @Column({ name: 'end_time' })
   endTime: string;
 
   @Column()
