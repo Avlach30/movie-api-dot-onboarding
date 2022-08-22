@@ -44,7 +44,7 @@ export class UserService {
       email: email,
       password: hashedPw,
       avatar: avatar,
-      is_admin: isAdmin,
+      isAdmin: isAdmin,
       created_at: generateDateNow(),
       updated_at: generateDateNow(),
     });
@@ -75,7 +75,7 @@ export class UserService {
     const token = this.jwtService.sign(
       {
         userId: user.id,
-        isUserAdmin: user.is_admin,
+        isUserAdmin: user.isAdmin,
       },
       {
         expiresIn: '4h',

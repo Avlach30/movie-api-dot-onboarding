@@ -44,10 +44,10 @@ export class ScheduleService {
 
     if (!studio || !movie) throw new NotFoundException('Data not found');
 
-    newSchedule.movie_id = movie;
-    newSchedule.studio_id = studio;
-    newSchedule.start_time = dto.start_time;
-    newSchedule.end_time = dto.end_time;
+    newSchedule.movieId = movie;
+    newSchedule.studioId = studio;
+    newSchedule.startTime = dto.start_time;
+    newSchedule.endTime = dto.end_time;
     newSchedule.price = dto.price;
     newSchedule.date = dto.date;
 
@@ -69,8 +69,8 @@ export class ScheduleService {
     const schedule = await this.scheduleRepository
       .createQueryBuilder('movie_schedules')
       .where('movie_schedules.date like :date', { date: `${dateNow}%` })
-      .innerJoinAndSelect('movie_schedules.movie_id', 'movies')
-      .innerJoinAndSelect('movie_schedules.studio_id', 'studios')
+      .innerJoinAndSelect('movie_schedules.movieId', 'movies')
+      .innerJoinAndSelect('movie_schedules.studioId', 'studios')
       .getMany();
 
     return {

@@ -43,7 +43,7 @@ export class MovieService {
         title: createMovieDto.title,
         overview: createMovieDto.overview,
         poster: poster,
-        play_until: createMovieDto.play_until,
+        playUntil: createMovieDto.play_until,
         created_at: generateDateNow(),
         updated_at: generateDateNow(),
       });
@@ -60,8 +60,8 @@ export class MovieService {
         await queryRunner.manager.save(newTag);
 
         const newMovieTag = new MovieTag();
-        newMovieTag.movie_id = newMovie;
-        newMovieTag.tag_id = newTag;
+        newMovieTag.movieId = newMovie;
+        newMovieTag.tagId = newTag;
         newMovieTag.created_at = generateDateNow();
         newMovieTag.updated_at = generateDateNow();
 

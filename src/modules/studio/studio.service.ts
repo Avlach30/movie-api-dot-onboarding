@@ -17,8 +17,8 @@ export class StudioService {
     if (!admin) throw new ForbiddenException('Forbidden to access, only admin');
 
     const newStudio = await this.movieStudioRepository.create({
-      studio_number: addNewStudioDto.studio_number,
-      seat_capacity: addNewStudioDto.seat_capacity,
+      studioNumber: addNewStudioDto.studio_number,
+      seatCapacity: addNewStudioDto.seat_capacity,
       created_at: generateDateNow(),
       updated_at: generateDateNow(),
     });
