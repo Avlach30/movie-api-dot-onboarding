@@ -5,8 +5,8 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-import { User } from '../entities/user.entity';
-import { generateDateNow } from '../utils/date-now';
+import { User } from '../../entities/user.entity';
+import { generateDateNow } from '../../utils/date-now';
 
 @Injectable()
 export class UserService {

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { UserService } from './user.service';
-import { SignupDto } from '../dto/sign-up.dto';
+import { SignupDto } from '../../dto/sign-up.dto';
 import { ResponseInterceptor } from 'src/utils/responses/api-success-response';
 import { HttpExceptionFilter } from 'src/utils/responses/api-failed-response';
 import { UploadHandler } from 'src/utils/image-upload';

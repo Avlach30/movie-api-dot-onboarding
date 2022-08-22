@@ -5,11 +5,11 @@ import { ScheduleModule } from '@nestjs/schedule';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { MovieModule } from './movie/movie.module';
+import { UserModule } from './modules/user/user.module';
+import { MovieModule } from './modules/movie/movie.module';
 import { AppConfig } from './config/app.config';
-import { StudioModule } from './studio/studio.module';
-import { MovieScheduleModule } from './schedule/schedule.module';
+import { StudioModule } from './modules/studio/studio.module';
+import { MovieScheduleModule } from './modules/schedule/schedule.module';
 import { IpLoggerMidlleware } from './middleware/ip-logger';
 
 @Module({
