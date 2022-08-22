@@ -15,11 +15,11 @@ export class MovieTag {
 
   @ManyToOne(() => Movie, (movie) => movie.id, { eager: true }) //Reference to Movie entity
   @JoinColumn({ name: 'movie_id' })
-  movie_id: Movie;
+  movieId: Movie;
 
   @ManyToOne(() => Tag, (tag) => tag.id, { eager: true }) //Reference to Tags entity
   @JoinColumn({ name: 'tag_id' })
-  tag_id: Tag;
+  tagId: Tag;
 
   @Column({ type: 'timestamp' })
   created_at: string;

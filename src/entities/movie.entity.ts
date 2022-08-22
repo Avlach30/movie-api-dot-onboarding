@@ -14,8 +14,8 @@ export class Movie {
   @Column()
   poster: string;
 
-  @Column()
-  play_until: string;
+  @Column({ name: 'play_until' })
+  playUntil: string;
 
   @Column({ type: 'timestamp' })
   created_at: string;

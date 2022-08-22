@@ -5,11 +5,11 @@ export class Studio {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  studio_number: number;
+  @Column({ name: 'studio_number' })
+  studioNumber: number;
 
-  @Column()
-  seat_capacity: number;
+  @Column({ name: 'seat_capacity' })
+  seatCapacity: number;
 
   @Column({ type: 'timestamp' })
   created_at: string;

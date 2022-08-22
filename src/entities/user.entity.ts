@@ -17,8 +17,8 @@ export class User {
   @Column()
   avatar: string;
 
-  @Column()
-  is_admin: boolean;
+  @Column({ name: 'is_admin' })
+  isAdmin: boolean;
 
   @Column({ type: 'timestamp' })
   created_at: string;

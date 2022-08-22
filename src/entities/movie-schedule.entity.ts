@@ -15,17 +15,17 @@ export class MovieSchedule {
 
   @ManyToOne(() => Movie, (movie) => movie.id, { eager: true }) //Reference to Movie entity)
   @JoinColumn({ name: 'movie_id' })
-  movie_id: Movie;
+  movieId: Movie;
 
   @ManyToOne(() => Studio, (studio) => studio.id, { eager: true }) //Reference to Studio entity
   @JoinColumn({ name: 'studio_id' })
-  studio_id: Studio;
+  studioId: Studio;
 
-  @Column()
-  start_time: string;
+  @Column({ name: 'start-time' })
+  startTime: string;
 
-  @Column()
-  end_time: string;
+  @Column({ name: 'end-time' })
+  endTime: string;
 
   @Column()
   price: number;
