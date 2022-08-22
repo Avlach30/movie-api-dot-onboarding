@@ -1,12 +1,16 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
+  Req,
   UploadedFile,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 
 import { UserService } from './user.service';
 import { SignupDto } from '../../dto/sign-up.dto';
@@ -56,5 +60,12 @@ export class UserController {
     @Body('password') password: string,
   ) {
     return await this.userService.login(email, password);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get('profile')
+  @HttpCode(200)
+  async getLoggedUser(@Req() req: any) {
+    return await this.userService.getLoggedUser(req, 'loggedUserId');
   }
 }

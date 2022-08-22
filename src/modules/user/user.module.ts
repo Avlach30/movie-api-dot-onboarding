@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { AuthorizeMiddleware } from 'src/middleware/authorize';
 import { User } from '../../entities/user.entity';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
@@ -23,6 +24,6 @@ import { UserService } from './user.service';
     }),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [AuthorizeMiddleware, UserService],
 })
 export class UserModule {}

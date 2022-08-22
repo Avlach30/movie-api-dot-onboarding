@@ -1,7 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Cache } from 'cache-manager';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -12,6 +18,7 @@ import { generateDateNow } from '../../utils/date-now';
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
@@ -89,6 +96,28 @@ export class UserService {
         userId: user.id,
       },
       message: 'Successfully log in',
+    };
+  }
+
+  async getLoggedUser(req: any, key: string) {
+    let userId;
+
+    const getUserId = await this.cacheManager.get(key); //* Get key from redis store
+    // console.log(getUserId);
+    //If loggedUserId not exist
+    if (!getUserId) {
+      //* Set key with value and save it to redis store
+      await this.cacheManager.set(key, req.user.userId);
+      userId = await this.cacheManager.get(key);
+    } else {
+      userId = getUserId;
+    }
+
+    const user = await this.userRepository.findByIds([userId]);
+
+    return {
+      data: user,
+      message: 'Successfully get logged user',
     };
   }
 }
