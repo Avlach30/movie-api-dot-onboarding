@@ -29,6 +29,7 @@
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n src/config/database.config.ts"
   },
   "dependencies": {
+    "@keycloak/keycloak-admin-client": "^18.0.0",
     "@nestjs/axios": "^0.1.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
