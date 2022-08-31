@@ -13,6 +13,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { User } from '../../entities/user.entity';
 import { generateDateNow } from '../../utils/date-now';
+import KeycloakAdminClient from '@keycloak/keycloak-admin-client';
 
 @Injectable()
 export class UserService {
@@ -34,18 +35,52 @@ export class UserService {
     // eslint-disable-next-line prettier/prettier
     const avatar = `http://localhost:${this.configService.get<number>('port')}/assets${file.path.replace(/\\/g, '/').substring('public'.length)}`;
 
-    //* Check if user already exist based on email
+    //* Configure keycloak
+    const keycloackAdminClient = new KeycloakAdminClient();
+    await keycloackAdminClient.auth({
+      username: 'admin',
+      password: 'adminPassword',
+      grantType: 'password',
+      clientId: 'admin-cli',
+    });
+
+    keycloackAdminClient.setConfig({
+      realmName: 'movie-realm',
+    });
+
+    //* Check if user already exist based on email from db and keycloak
     const user = await this.userRepository.findOne({
       where: {
         email: email,
       },
     });
-    if (user) {
+
+    const existingKeycloackUser = await keycloackAdminClient.users.find({
+      email: email,
+    });
+
+    if (user || existingKeycloackUser[0] != undefined) {
       throw new BadRequestException('E-Mail already exist');
     }
 
     const hashedPw = await bcrypt.hash(password, 12);
 
+    //* Insert new data to keycloak
+    await keycloackAdminClient.users.create({
+      username: name,
+      email: email,
+      firstName: 'user',
+      lastName: name,
+      credentials: [
+        {
+          type: 'password',
+          value: hashedPw,
+          temporary: false,
+        },
+      ],
+    });
+
+    //* Insert new data to db via ORM
     const newUser = await this.userRepository.create({
       name: name,
       email: email,
