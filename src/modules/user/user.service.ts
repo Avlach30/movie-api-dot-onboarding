@@ -104,12 +104,34 @@ export class UserService {
       throw new BadRequestException('Please input all fields');
     }
 
+    //* Configure keycloak
+    const keycloackAdminClient = new KeycloakAdminClient();
+    await keycloackAdminClient.auth({
+      username: 'admin',
+      password: 'adminPassword',
+      grantType: 'password',
+      clientId: 'admin-cli',
+    });
+
+    keycloackAdminClient.setConfig({
+      realmName: 'movie-realm',
+    });
+
+    //* Check user data in DB and keycloak directory
+    const existingKeycloackUser = await keycloackAdminClient.users.find({
+      email: email,
+    });
     const user = await this.userRepository.findOne({
       where: {
         email: email,
       },
     });
-    if (!user) throw new BadRequestException('User not found with this email');
+
+    if (!user || !existingKeycloackUser[0]) {
+      throw new BadRequestException('User not found with this email');
+    }
+
+    // console.log(existingKeycloackUser);
 
     const isCorrect = await bcrypt.compare(password, user.password);
     if (!isCorrect) throw new BadRequestException('Password Incorrect');
@@ -118,6 +140,11 @@ export class UserService {
       {
         userId: user.id,
         isUserAdmin: user.isAdmin,
+        keycloak: {
+          userId: existingKeycloackUser[0].id,
+          totp: existingKeycloackUser[0].totp,
+          accessConfig: existingKeycloackUser[0].access,
+        },
       },
       {
         expiresIn: '4h',
